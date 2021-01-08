@@ -3,11 +3,12 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
+        n = len(nums)
         k = k % len(nums)
-        for i in range(k):
-            pre = nums[-1]
-            for j in range(len(nums)):
-                temp = nums[j]
-                nums[j] = pre
-                pre = temp
-                print('nums:', nums)
+        new_num = [0] * n
+        for i in range(n):
+            new_num[(i+k)%n] = nums[i]
+
+        for i in range(n):
+            nums[i] = new_num[i]
+        

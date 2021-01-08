@@ -12,7 +12,7 @@ class Solution:
             for j in range(n):
                 if isConnected[i][j] == 1 and j not in visited:
                     visited.add(j)
-                    dfs[j]
+                    dfs(j)
         
         n = len(isConnected)
         visited = set()
@@ -24,7 +24,9 @@ class Solution:
                 count += 1
         
         return count
-        
+    
+    # 广度优先：对于每个城市，如果该城市未被访问过，则从该城市开始进行广度优先搜索
+    # 直到同一个连通分量中的所有城市都被访问到，即可得到一个省份
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         n = len(isConnected)
         visited = set()
@@ -40,4 +42,25 @@ class Solution:
                     if isConnected[i][j] == 1 and k not in visited:
                         q.append(k)
                 count += 1
+        return count
+
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        def find(index:int) -> int:
+            if parent[index] != index:
+                parent[index] = find(parent[index])
+            return parent[index]
+
+        def union(index1:int, index2:int):
+            parent[find(index1)] = find(index2)
+        
+        n = len(isConnected)
+        parent = list(range(n))
+
+        for i in range(n):
+            for j in range(i+1, n):
+                if isConnected[i][j] == 1:
+                    union(i, j)
+
+        count = sum(parent[i] == i for i in range(n))
+
         return count
